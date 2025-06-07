@@ -9,4 +9,8 @@
 ## ─────────────────────────────────────────────────────────────────────────────
 
 sketchybar --add item slack right
-sketchybar --set slack icon="" update_freq=60 script="/Users/ben.kearsley/.config/sketchybar/plugins/slack.sh"
+sketchybar --set slack \
+    icon="" \
+    update_freq=60 \
+    script="/Users/ben.kearsley/.config/sketchybar/plugins/slack.sh" \
+    click_script="/Users/ben.kearsley/.config/sketchybar/plugins/slack_click.sh"
