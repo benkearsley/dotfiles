@@ -8,7 +8,6 @@
 ## ☕ Theme: homemade Catpuccin Machiatto
 ## ─────────────────────────────────────────────────────────────────────────────
 CONFIG_DIR="/Users/ben.kearsley/.config/sketchybar"
-echo "DEBUG sketchybarrc: CONFIG_DIR=$CONFIG_DIR" >> /tmp/sketchybar_debug.log
 
 # Source the theme file to get color variables
 source "${CONFIG_DIR}/themes/catppuccin-macchiato.sh"
