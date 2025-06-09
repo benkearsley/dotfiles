@@ -112,7 +112,7 @@ source "${CONFIG_DIR}/items/slack.sh"
 source "$CONFIG_DIR/items/front_app.sh"
 
 sketchybar -m --add item vpn right \
-              --set vpn icon="🔓" \
+              --set vpn icon="󰞀" \
                         label="Checking..." \
                         update_freq=5 \
                         script="~/.config/sketchybar/plugins/vpn.sh"
