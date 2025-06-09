@@ -98,12 +98,6 @@ for monitor in $(aerospace list-monitors --format "%{monitor-appkit-nsscreen-scr
 done
 
 
-#front app
-source "$CONFIG_DIR/items/front_app.sh"
-
-
-
-
 ### ────────────────────────────────────────────────────────────────────────────
 ### Items
 ### ────────────────────────────────────────────────────────────────────────────
@@ -113,6 +107,15 @@ source "$CONFIG_DIR/items/front_app.sh"
 source "${CONFIG_DIR}/items/datetime.sh"
 source "${CONFIG_DIR}/items/battery.sh"
 source "${CONFIG_DIR}/items/slack.sh"
+
+# front app
+source "$CONFIG_DIR/items/front_app.sh"
+
+sketchybar -m --add item vpn right \
+              --set vpn icon="🔓" \
+                        label="Checking..." \
+                        update_freq=5 \
+                        script="~/.config/sketchybar/plugins/vpn.sh"
 
 ## ─────────────────────────────────────────────────────────────────────────────
 ## Run scripts, on initial launch.
