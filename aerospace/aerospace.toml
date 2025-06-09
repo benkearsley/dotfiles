@@ -93,6 +93,18 @@ run = 'layout floating'
     outer.top =        5
     outer.right =      5
 
+# Workspace to monitor assignments based on your desired layout:
+# Laptop (Built-in Retina Display): workspaces 1-2 → Monitor ID 1
+# Primary external (your main external monitor): workspaces 3-5 → Monitor ID 3 (LG ULTRAFINE 1)  
+# Second external (your secondary external): workspaces 6-7 → Monitor ID 2 (LG ULTRAFINE 2)
+[workspace-to-monitor-force-assignment]
+    1 = 'main'  # Laptop: Built-in Retina Display
+    2 = 'main'  # Laptop: Built-in Retina Display
+    3 = ['\(2\)$', 'main']  # Primary external: LG ULTRAFINE (1)
+    4 = ['\(2\)$', 'main']  # Primary external: LG ULTRAFINE (1)
+    5 = ['\(2\)$', 'main']  # Primary external: LG ULTRAFINE (1)
+    6 = ['\(1\)$', '\(2\)$', 'main']  # Second external: LG ULTRAFINE (2)
+    7 = ['\(1\)$', '\(2\)$', 'main']  # Second external: LG ULTRAFINE (2)
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes

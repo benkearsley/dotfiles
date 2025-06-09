@@ -51,9 +51,16 @@ sketchybar --add event aerospace_workspace_change
 for monitor in $(aerospace list-monitors --format "%{monitor-appkit-nsscreen-screens-id}"); do
   for sid in $(aerospace list-workspaces --monitor "$monitor"); do
     # Determine which display this workspace should be shown on
+    # Display 1 (Monitor 1 - Built-in): workspaces 1-2
+    # Display 2 (Monitor 2 - LG ULTRAFINE 2): workspaces 6-7
+    # Display 3 (Monitor 3 - LG ULTRAFINE 1): workspaces 3-5
     display_id="1"
-    if [ "$sid" -ge 6 ] && [ "$sid" -le 7 ]; then
-      display_id="2"
+    if [ "$sid" -ge 1 ] && [ "$sid" -le 2 ]; then
+      display_id="1"  # Built-in display
+    elif [ "$sid" -ge 3 ] && [ "$sid" -le 5 ]; then
+      display_id="3"  # LG ULTRAFINE (1) display
+    elif [ "$sid" -ge 6 ] && [ "$sid" -le 7 ]; then
+      display_id="2"  # LG ULTRAFINE (2) display
     fi
     
     sketchybar --add item space.$sid left \
