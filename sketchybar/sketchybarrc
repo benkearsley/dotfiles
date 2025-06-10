@@ -19,7 +19,16 @@ source "${CONFIG_DIR}/themes/catppuccin-macchiato.sh"
 ## ─────────────────────────────────────────────────────────────────────────────
 sketchybar --bar position=top \
                  height=35 \
-                 color="${_SSDF_CM_MANTLE}"
+                 color="${_SSDF_CM_MANTLE}" \
+                 sticky=on \
+                 topmost=on \
+                 display=all \
+                 hidden=off \
+                 y_offset=0 \
+                 margin=0 \
+                 blur_radius=0 \
+                 padding_left=0 \
+                 padding_right=0
 
 ## ─────────────────────────────────────────────────────────────────────────────
 ## Item Properties. 
