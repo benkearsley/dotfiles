@@ -90,7 +90,7 @@ run = 'layout floating'
     inner.vertical =   8
     outer.left =       5
     outer.bottom =     0
-    outer.top =        5
+    outer.top =        [{monitor."Built-in Retina Display" = 5}, 40]
     outer.right =      5
 
 # Workspace to monitor assignments based on your desired layout:
