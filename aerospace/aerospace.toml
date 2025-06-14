@@ -142,6 +142,7 @@ run = 'layout floating'
     # App Shortcuts
     alt-enter = 'exec-and-forget open -a /Applications/Ghostty.app'
     alt-g = 'exec-and-forget open -a /Applications/"Google Chrome.app"'
+    alt-shift-g = 'exec-and-forget open -na /Applications/"Google Chrome.app"'
     alt-s = 'exec-and-forget open -a /Applications/Slack.app'
     alt-m = 'exec-and-forget open -a /Applications/"Microsoft Outlook.app"'
     alt-n = 'exec-and-forget open -a /Applications/Notion.app'

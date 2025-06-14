@@ -134,15 +134,11 @@ done
 source "${CONFIG_DIR}/items/datetime.sh"
 source "${CONFIG_DIR}/items/battery.sh"
 source "${CONFIG_DIR}/items/slack.sh"
-
+source "${CONFIG_DIR}/items/headphones.sh"
+source "${CONFIG_DIR}/items/vpn.sh"
 # front app
 source "$CONFIG_DIR/items/front_app.sh"
 
-sketchybar -m --add item vpn right \
-              --set vpn icon="󰞀" \
-                        label="Checking..." \
-                        update_freq=5 \
-                        script="~/.config/sketchybar/plugins/vpn.sh"
 
 ## ─────────────────────────────────────────────────────────────────────────────
 ## Run scripts, on initial launch.
