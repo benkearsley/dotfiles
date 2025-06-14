@@ -132,12 +132,6 @@ run = 'layout floating'
     # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
     # Opens the existing terminal in the workspace
 
-    # alt-enter = '''exec-and-forget osascript -e '
-    #     tell application "Terminal"
-    #     do script ""
-    #     activate
-    #     end tell'
-    # '''
 
     # App Shortcuts
     alt-enter = 'exec-and-forget open -a /Applications/Ghostty.app'
