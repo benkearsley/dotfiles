@@ -3,6 +3,9 @@ return {
         "hrsh7th/cmp-nvim-lsp",
     },
     {
+        "hrsh7th/cmp-buffer",
+    },
+    {
         "L3MON4D3/LuaSnip",
         version = "v2.*",
         build = "make install_jsregexp",
@@ -50,9 +53,9 @@ return {
                     end, { "i", "s" }),
                 }),
                 sources = cmp.config.sources({
-                    { name = "luasnip" },
-                    { name = "buffer" },
-                    { name = "nvim_lsp" }
+                    { name = "nvim_lsp", priority = 1000 },
+                    { name = "luasnip", priority = 750 },
+                    { name = "buffer", priority = 500 },
                 }),
             })
         end,

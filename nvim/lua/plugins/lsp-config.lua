@@ -1,9 +1,9 @@
 return {
 	{
-		"mason-org/mason-lspconfig.nvim",
+		"williamboman/mason-lspconfig.nvim",
 		opts = {},
 		dependencies = {
-			{ "mason-org/mason.nvim", opts = {} },
+			{ "williamboman/mason.nvim", opts = {} },
 			"neovim/nvim-lspconfig",
 		},
 		config = function()
@@ -16,15 +16,20 @@ return {
 					"yamlls",
 					"jsonls",
 				},
+				automatic_installation = true,
 			})
 		end,
 	},
 	{
 		"neovim/nvim-lspconfig",
+		dependencies = {
+			"williamboman/mason-lspconfig.nvim",
+		},
 		config = function()
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 			local lspconfig = require("lspconfig")
 
+			-- Configure LSP servers
 			lspconfig.lua_ls.setup({
 				capabilities = capabilities,
 			})
