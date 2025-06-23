@@ -5,15 +5,15 @@ return {
 		local config = require("nvim-treesitter.configs")
 		config.setup({
 			ensure_installed = {
-				"lua", 
-				"javascript", 
-				"python", 
-				"bash", 
-				"html", 
-				"sql", 
-				"typescript", 
-				"vim", 
-				"yaml", 
+				"lua",
+				"javascript",
+				"python",
+				"bash",
+				"html",
+				"sql",
+				"typescript",
+				"vim",
+				"yaml",
 				"json"
 			},
 			highlight = { enable = true },

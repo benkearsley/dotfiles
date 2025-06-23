@@ -17,6 +17,10 @@ vim.opt.rtp:prepend(lazypath)
 -- VIM OPTIONS
 vim.g.mapleader = " "
 vim.opt.clipboard = "unnamedplus"
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
 
 require("lazy").setup({
 	spec = {
