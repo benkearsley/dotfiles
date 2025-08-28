@@ -1,6 +1,17 @@
 ### START-OF-ICON-MAP
 function icon_map() {
   case "$1" in
+  ### CUSTOM
+  "Bruno")
+    icon_result=":postman:"
+    ;;
+  "Microsoft Azure Storage Explorer")
+    icon_result=":azure:"
+    ;;
+  "Another Redis Desktop Manager")
+    icon_result=":redis:"
+    ;; 
+  ### DEFAULT
   "Live")
     icon_result=":ableton:"
     ;;

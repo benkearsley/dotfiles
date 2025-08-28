@@ -21,6 +21,11 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
+vim.keymap.set("i", "jj", "<Esc>", { noremap = true, silent = true })
+vim.opt.timeoutlen = 300
+
+
+
 
 require("lazy").setup({
 	spec = {
