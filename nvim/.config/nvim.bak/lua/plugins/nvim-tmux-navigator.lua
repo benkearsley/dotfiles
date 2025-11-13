@@ -15,5 +15,6 @@ return {
     { "<C-l>", "<Cmd>TmuxNavigateRight<CR>" },
     { "<C-\\>", "<Cmd>TmuxNavigatePrevious<CR>" },
   },
-  lazy = true,
+  lazy = true
 }
+
