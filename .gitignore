@@ -1,2 +1,5 @@
 raycast/extensions
 raycast/extensions/*
+
+# Tmux plugins (managed by TPM)
+tmux/.config/tmux/plugins/*

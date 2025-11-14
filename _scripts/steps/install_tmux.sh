@@ -82,32 +82,25 @@ if ! safe_stow "tmux" "$DOTFILES_BASE_PATH"; then
   exit 1
 fi
 
-# Create symlink from ~/.tmux.conf to ~/.config/tmux/tmux.conf
-# tmux looks for ~/.tmux.conf by default, so we need this symlink
+# Verify config file exists
 TMUX_CONFIG_PATH="$CONFIG_BASE_PATH/tmux/tmux.conf"
-TMUX_SYMLINK="$HOME/.tmux.conf"
-
-if [[ -f "$TMUX_CONFIG_PATH" ]]; then
-  # Remove existing symlink or file if it exists
-  if [[ -e "$TMUX_SYMLINK" ]] || [[ -L "$TMUX_SYMLINK" ]]; then
-    if [[ -L "$TMUX_SYMLINK" ]]; then
-      rm "$TMUX_SYMLINK" || { echo "Error: Failed to remove existing symlink $TMUX_SYMLINK" >&2; exit 1; }
-    else
-      # It's a file, backup it first
-      backup_config "$TMUX_SYMLINK" "$DOTFILES_BASE_PATH" "$CONFIG_BASE_PATH" "tmux"
-      rm "$TMUX_SYMLINK" || { echo "Error: Failed to remove existing file $TMUX_SYMLINK" >&2; exit 1; }
-    fi
-  fi
-  
-  # Create the symlink
-  if ! ln -s "$TMUX_CONFIG_PATH" "$TMUX_SYMLINK"; then
-    echo "Error: Failed to create symlink from $TMUX_SYMLINK to $TMUX_CONFIG_PATH" >&2
-    exit 1
-  fi
-  echo "Created symlink: $TMUX_SYMLINK -> $TMUX_CONFIG_PATH"
-else
+if [[ ! -f "$TMUX_CONFIG_PATH" ]]; then
   echo "Error: tmux config file not found at $TMUX_CONFIG_PATH after stowing" >&2
   exit 1
 fi
+
+# Remove ~/.tmux.conf if it exists (tmux 3.1+ supports ~/.config/tmux/tmux.conf directly)
+# We remove it to avoid conflicts and keep config in one place
+if [[ -e "$HOME/.tmux.conf" ]] || [[ -L "$HOME/.tmux.conf" ]]; then
+  if [[ -L "$HOME/.tmux.conf" ]]; then
+    rm "$HOME/.tmux.conf" && echo "Removed existing ~/.tmux.conf symlink (using ~/.config/tmux/tmux.conf instead)"
+  else
+    # It's a file, backup it first
+    backup_config "$HOME/.tmux.conf" "$DOTFILES_BASE_PATH" "$CONFIG_BASE_PATH" "tmux"
+    rm "$HOME/.tmux.conf" && echo "Removed existing ~/.tmux.conf file (using ~/.config/tmux/tmux.conf instead)"
+  fi
+fi
+
+echo "tmux will use config from: $TMUX_CONFIG_PATH"
 
 echo "✅ tmux setup complete!"
