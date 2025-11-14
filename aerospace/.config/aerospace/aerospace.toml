@@ -11,6 +11,7 @@ after-login-command = []
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
   'exec-and-forget $HOME/.config/sketchybar/start_sketchybar.sh',
+  'exec-and-forget $HOME/.config/borders/bordersrc',
 ]
 
 # Start AeroSpace at login
@@ -50,6 +51,14 @@ automatically-unhide-macos-hidden-apps = true
 exec-on-workspace-change = ['/bin/bash', '-c', 'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE && ~/.config/sketchybar/plugins/update_workspace_icons.sh']
 
 [[on-window-detected]]
+if.app-name-regex-substring = 'cisco secure client'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'self service'
+run = 'layout floating'
+
+[[on-window-detected]]
 if.app-name-regex-substring = 'zoom.us'
 run = 'layout floating'
 
@@ -72,6 +81,11 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'outlook'
+run = 'layout floating'
+
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'teams'
 run = 'layout floating'
 
 [[on-window-detected]]
