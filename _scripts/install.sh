@@ -4,6 +4,10 @@
 # This script detects the OS, installs prerequisites, and calls individual
 # step scripts for each tool based on the operating system
 
+# TODO: install omarchy tmux switcher
+# TODO: check out other config on omarchy
+# TODO: commit this to github
+
 set -euo pipefail
 
 # Get the directory where this script is located
@@ -41,7 +45,7 @@ elif [[ "$os" == "arch" ]]; then
     exit 1
   fi
   echo "Using pacman..."
-  
+
   # Check sudo availability for Arch
   source "$SCRIPT_DIR/lib/sudo_check.sh"
   if ! check_sudo_available; then
@@ -110,9 +114,9 @@ if [[ "$os" == "arch" ]]; then
   touch "$TERMINAL_CONFIG_PATH"
 
   if grep -q '^export TERMINAL=' "$TERMINAL_CONFIG_PATH" 2>/dev/null; then
-      sed -i 's/^export TERMINAL=.*/export TERMINAL=ghostty/' "$TERMINAL_CONFIG_PATH"
+    sed -i 's/^export TERMINAL=.*/export TERMINAL=ghostty/' "$TERMINAL_CONFIG_PATH"
   else
-      echo 'export TERMINAL=ghostty' >> "$TERMINAL_CONFIG_PATH"
+    echo 'export TERMINAL=ghostty' >>"$TERMINAL_CONFIG_PATH"
   fi
 fi
 
