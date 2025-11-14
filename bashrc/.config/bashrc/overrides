@@ -1,0 +1,9 @@
+# Bashrc overrides for omarchy distribution
+# This file contains custom overrides to the default omarchy bashrc configuration
+#
+# TODO: Ensure this file is sourced in the omarchy bashrc configuration
+# The omarchy distro should source this file, e.g.:
+#   source ~/.config/bashrc/overrides
+
+# Add your custom bashrc overrides here
+

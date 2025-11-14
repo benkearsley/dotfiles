@@ -9,4 +9,4 @@
 ## ─────────────────────────────────────────────────────────────────────────────
 
 sketchybar --add item hostname left
-sketchybar --set hostname icon="" script="/Users/ben.kearsley/.config/sketchybar/plugins/hostname.sh"
+sketchybar --set hostname icon="" script="$HOME/.config/sketchybar/plugins/hostname.sh"

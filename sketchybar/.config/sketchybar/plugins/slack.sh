@@ -5,7 +5,7 @@
 ## ─────────────────────────────────────────────────────────────────────────────
 ## ☕ Theme: homemade Catpuccin Machiatto
 ## ─────────────────────────────────────────────────────────────────────────────
-source "/Users/ben.kearsley/.config/sketchybar/themes/catppuccin-macchiato.sh"
+source "$HOME/.config/sketchybar/themes/catppuccin-macchiato.sh"
 
 ## ─────────────────────────────────────────────────────────────────────────────
 ## Displays numbder of Slack direct unread notifications.

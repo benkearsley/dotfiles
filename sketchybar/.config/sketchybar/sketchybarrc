@@ -7,7 +7,7 @@
 ## ─────────────────────────────────────────────────────────────────────────────
 ## ☕ Theme: homemade Catpuccin Machiatto
 ## ─────────────────────────────────────────────────────────────────────────────
-CONFIG_DIR="/Users/ben.kearsley/.config/sketchybar"
+CONFIG_DIR="$HOME/.config/sketchybar"
 
 # Source the theme file to get color variables
 source "${CONFIG_DIR}/themes/catppuccin-macchiato.sh"
@@ -139,9 +139,9 @@ done
 
 source "${CONFIG_DIR}/items/datetime.sh"
 source "${CONFIG_DIR}/items/battery.sh"
-source "${CONFIG_DIR}/items/slack.sh"
+# source "${CONFIG_DIR}/items/slack.sh"  # Disabled - not needed
 source "${CONFIG_DIR}/items/headphones.sh"
-source "${CONFIG_DIR}/items/vpn.sh"
+# source "${CONFIG_DIR}/items/vpn.sh"  # Disabled - not needed
 # front app
 source "$CONFIG_DIR/items/front_app.sh"
 

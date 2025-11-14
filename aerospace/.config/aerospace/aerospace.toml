@@ -10,7 +10,7 @@ after-login-command = []
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  'exec-and-forget /Users/ben.kearsley/.config/sketchybar/start_sketchybar.sh',
+  'exec-and-forget $HOME/.config/sketchybar/start_sketchybar.sh',
 ]
 
 # Start AeroSpace at login
@@ -48,6 +48,10 @@ automatically-unhide-macos-hidden-apps = true
 
 # Notify Sketchybar about workspace change and update icons
 exec-on-workspace-change = ['/bin/bash', '-c', 'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE && ~/.config/sketchybar/plugins/update_workspace_icons.sh']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'google chrome'
+run = 'layout floating'
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'telegram'
@@ -136,11 +140,7 @@ run = 'layout floating'
     # App Shortcuts
     alt-enter = 'exec-and-forget open -a /Applications/Ghostty.app'
     alt-g = 'exec-and-forget open -a /Applications/"Google Chrome.app"'
-    alt-shift-g = 'exec-and-forget open -na /Applications/"Google Chrome.app"'
-    alt-s = 'exec-and-forget open -a /Applications/Slack.app'
-    alt-m = 'exec-and-forget open -a /Applications/"Microsoft Outlook.app"'
-    alt-n = 'exec-and-forget open -a /Applications/Notion.app'
-    alt-d = 'exec-and-forget open -a /Applications/Datagrip.app'
+    alt-shift-b = 'exec-and-forget open -na /Applications/"Google Chrome.app"'
 
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#layout

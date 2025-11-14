@@ -13,4 +13,4 @@ sketchybar --set headphones icon="󰋋" \
                              label.color=0xff8bd5ca \
                              update_freq=10 \
                              drawing=off \
-                             script="/Users/ben.kearsley/.config/sketchybar/plugins/bluetooth_headphones.sh"
+                             script="$HOME/.config/sketchybar/plugins/bluetooth_headphones.sh"

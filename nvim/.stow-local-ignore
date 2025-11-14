@@ -1,0 +1,7 @@
+# Ignore backup directories and files
+^nvim\.bak$
+^\.bak$
+.*\.bak$
+
+# Ignore themes directory (copied manually, not stowed)
+^themes$

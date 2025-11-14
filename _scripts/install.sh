@@ -1,12 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# This script collects input before installing dotfiles.
-# Inputs are passed to the orchestrator script, which calls individual
-# scripts for specific programs
+# Main dotfiles installation script
+# This script detects the OS, installs prerequisites, and calls individual
+# step scripts for each tool based on the operating system
 
 set -euo pipefail
 
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_BASE_PATH="$(cd "$SCRIPT_DIR/.." && pwd)"
+CONFIG_BASE_PATH="$HOME/.config"
+
 echo "Beginning dotfiles installation..."
+echo "Dotfiles base path: $DOTFILES_BASE_PATH"
+echo "Config base path: $CONFIG_BASE_PATH"
 
 # Detect OS
 os=""
@@ -21,88 +28,83 @@ fi
 
 echo "Detected OS: $os"
 
-# Install package manager tools
+# Check package manager
 if [[ "$os" == "mac" ]]; then
   if ! command -v brew &>/dev/null; then
-    echo "Homebrew is not installed. Please install it manually from https://brew.sh"
+    echo "Error: Homebrew is not installed. Please install it manually from https://brew.sh"
     exit 1
   fi
+  echo "Using Homebrew..."
 elif [[ "$os" == "arch" ]]; then
   if ! command -v pacman &>/dev/null; then
-    echo "pacman not found. This system does not appear to be Arch-based."
+    echo "Error: pacman not found. This system does not appear to be Arch-based."
+    exit 1
+  fi
+  echo "Using pacman..."
+  
+  # Check sudo availability for Arch
+  source "$SCRIPT_DIR/lib/sudo_check.sh"
+  if ! check_sudo_available; then
+    echo "Error: sudo is required for Arch Linux package installation."
     exit 1
   fi
 fi
-elif [[ "$os" == "arch" ]]; then
-  echo "Using pacman (already installed on Arch)..."
-fi
 
-# Install stow if missing
-if ! command -v stow &>/dev/null; then
-  echo "Installing stow..."
-  if [[ "$os" == "mac" ]]; then
-    brew install stow
+# Source helper libraries
+source "$SCRIPT_DIR/lib/backup.sh"
+source "$SCRIPT_DIR/lib/stow_helpers.sh"
+
+# Function to run a step script if it exists
+run_step() {
+  local step_script="$SCRIPT_DIR/steps/$1"
+  if [[ -f "$step_script" ]]; then
+    echo ""
+    echo "=========================================="
+    echo "Running: $1"
+    echo "=========================================="
+    if ! bash "$step_script" "$DOTFILES_BASE_PATH" "$CONFIG_BASE_PATH" "$os"; then
+      echo "Error: Step script failed: $1" >&2
+      exit 1
+    fi
   else
-    sudo pacman -S --needed --noconfirm stow
+    echo "Error: Step script not found: $step_script" >&2
+    exit 1
   fi
-else
-  echo "stow already installed. Skipping."
-fi
+}
 
+# Install prerequisite utilities
+# Note: stow must be installed first as it's needed for the other installations
+run_step "install_stow.sh"
+run_step "install_zoxide.sh"
+run_step "install_eza.sh"
+run_step "install_fzf.sh"
+run_step "install_bat.sh"
 
-# Install zoxide if missing
-if ! command -v zoxide &>/dev/null; then
-  echo "Installing zoxide..."
-  if [[ "$os" == "mac" ]]; then
-    brew install zoxide
-  else
-    sudo pacman -S --needed --noconfirm zoxide
-  fi
-else
-  echo "eza already installed. Skipping."
-fi
+# Run step scripts based on OS
+echo ""
+echo "Installing dotfiles for tools..."
 
+# Tools for both OS
+run_step "install_neovim.sh"
+run_step "install_ghostty.sh"
+run_step "install_starship.sh"
+run_step "install_tmux.sh"
 
-# Install eza if missing
-if ! command -v eza &>/dev/null; then
-  echo "Installing eza..."
-  if [[ "$os" == "mac" ]]; then
-    brew install eza
-  else
-    sudo pacman -S --needed --noconfirm eza
-  fi
-else
-  echo "eza already installed. Skipping."
-fi
-
-# Stow .zshrc if mac
+# OS-specific tools
 if [[ "$os" == "mac" ]]; then
-  echo "Linking .zshrc"
-  stow -v zshrc
-  source ~/.zshrc
+  run_step "install_aerospace.sh"
+  run_step "install_borders.sh"
+  run_step "install_sketchybar.sh"
+  run_step "install_zshrc.sh"
+elif [[ "$os" == "arch" ]]; then
+  run_step "install_hypr.sh"
+  run_step "install_bashrc.sh"
 fi
-
-if [[ "$os" == "arch" ]]; then
-  echo "bash rc already set up"
-fi
-
-
-# Install Ghostty if missing
-if ! command -v ghostty &>/dev/null; then
-  echo "Installing Ghostty..."
-  if [[ "$os" == "mac" ]]; then
-    brew install --cask ghostty
-  else
-    sudo pacman -S --needed --noconfirm ghostty
-  fi
-else
-  echo "Ghostty already installed. Skipping."
-fi
-
 
 # Set TERMINAL environment variable for Omarchy (Arch)
 if [[ "$os" == "arch" ]]; then
-  echo "Setting TERMINAL=ghostty..."
+  echo ""
+  echo "Setting TERMINAL=ghostty for Omarchy..."
   TERMINAL_CONFIG_PATH="$HOME/.config/uwsm/default"
   mkdir -p "$(dirname "$TERMINAL_CONFIG_PATH")"
   touch "$TERMINAL_CONFIG_PATH"
@@ -114,24 +116,18 @@ if [[ "$os" == "arch" ]]; then
   fi
 fi
 
-echo "Dotfiles installation completed."
+# Verification step
+echo ""
+echo "=========================================="
+echo "Verifying installation..."
+echo "=========================================="
 
-
-# TODO: symlink seed the ghostty directory with the omarchy config file (for mac)
-# TODO: convert p10k prompt back to starship
-
-# starship or p10k
-
-# tmux
-
-# aerospace on mac
-# sketchybar on mac
-# borders on mac
-
-# .zshrc or .bashrc
-
-# .ideamvimrc (on mac)
-
-
-
-
+source "$SCRIPT_DIR/lib/verify.sh"
+if verify_installation "$DOTFILES_BASE_PATH" "$CONFIG_BASE_PATH" "$os"; then
+  echo ""
+  echo "✅ Dotfiles installation completed successfully!"
+else
+  echo ""
+  echo "⚠️  Installation completed with warnings. Please review the output above."
+  exit 1
+fi

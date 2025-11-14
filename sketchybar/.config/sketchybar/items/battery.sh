@@ -10,5 +10,5 @@
 ## ─────────────────────────────────────────────────────────────────────────────
 
 sketchybar --add item battery right
-sketchybar --set battery update_freq=600 script="/Users/ben.kearsley/.config/sketchybar/plugins/battery.sh"
+sketchybar --set battery update_freq=600 script="$HOME/.config/sketchybar/plugins/battery.sh"
 sketchybar --subscribe battery system_woke power_source_change

@@ -6,7 +6,7 @@
 ## ─────────────────────────────────────────────────────────────────────────────
 ## ☕ Theme: homemade Catpuccin Machiatto
 ## ─────────────────────────────────────────────────────────────────────────────
-source "/Users/ben.kearsley/.config/sketchybar/themes/catppuccin-macchiato.sh"
+source "$HOME/.config/sketchybar/themes/catppuccin-macchiato.sh"
 
 ## ─────────────────────────────────────────────────────────────────────────────
 ## If the AeroSpace Workspace is the one in focus, then highlight it.

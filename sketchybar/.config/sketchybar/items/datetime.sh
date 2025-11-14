@@ -9,4 +9,4 @@
 ## ─────────────────────────────────────────────────────────────────────────────
 
 sketchybar --add item datetime right
-sketchybar --set datetime icon="󰃰" update_freq=60 script="/Users/ben.kearsley/.config/sketchybar/plugins/datetime.sh"
+sketchybar --set datetime icon="󰃰" update_freq=60 script="$HOME/.config/sketchybar/plugins/datetime.sh"

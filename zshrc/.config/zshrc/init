@@ -1,0 +1,44 @@
+# --- zinit plugin manager ---
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
+# Download Zinit, if it's not there yet
+if [ ! -d "$ZINIT_HOME" ]; then
+  mkdir -p "$(dirname $ZINIT_HOME)"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+
+# Source/Load zinit
+source "${ZINIT_HOME}/zinit.zsh"
+
+# --- zsh plugins via zinit ---
+# Load completions first
+zinit light zsh-users/zsh-completions
+autoload -Uz compinit && compinit
+
+# fzf-tab for enhanced tab completion
+zinit light Aloxaf/fzf-tab
+
+# Autosuggestions (Ctrl+F to accept)
+zinit light zsh-users/zsh-autosuggestions
+
+# Syntax highlighting (must be last)
+zinit light zsh-users/zsh-syntax-highlighting
+
+# Replay cd commands
+zinit cdreplay -q
+
+# --- starship prompt ---
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+# --- zoxide ---
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh --cmd cd)"
+fi
+
+# --- fzf ---
+if command -v fzf >/dev/null 2>&1; then
+  eval "$(fzf --zsh)"
+fi
+

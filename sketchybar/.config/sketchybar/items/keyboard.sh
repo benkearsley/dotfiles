@@ -9,4 +9,4 @@
 ## ─────────────────────────────────────────────────────────────────────────────
 
 sketchybar --add item keyboard right
-sketchybar --set keyboard icon="" update_freq=1 script="/Users/ben.kearsley/.config/sketchybar/plugins/keyboard.sh"
+sketchybar --set keyboard icon="" update_freq=1 script="$HOME/.config/sketchybar/plugins/keyboard.sh"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_DIR="/Users/ben.kearsley/.config/sketchybar"
+CONFIG_DIR="$HOME/.config/sketchybar"
 
 update_space_icons() {
     local sid=$1
