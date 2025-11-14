@@ -1,0 +1,17 @@
+# --- starship prompt ---
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
+
+# --- zoxide ---
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
+
+# --- fzf ---
+if command -v fzf >/dev/null 2>&1; then
+  # Source Zsh completion and keybindings if they exist
+  [[ -f "$HOME/dotfiles/fzf/completion.zsh" ]] && source "$HOME/dotfiles/fzf/completion.zsh"
+  [[ -f "$HOME/dotfiles/fzf/key-bindings.zsh" ]] && source "$HOME/dotfiles/fzf/key-bindings.zsh"
+fi
+
