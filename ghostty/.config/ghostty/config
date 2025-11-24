@@ -1,4 +1,6 @@
-# Dynamic theme colors
+
+# include both themes, comment out the one that does not belong to the operating system
+theme = TokyoNight
 config-file = ?"~/.config/omarchy/current/theme/ghostty.conf"
 
 # Font

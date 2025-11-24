@@ -5,7 +5,6 @@
 # step scripts for each tool based on the operating system
 
 # TODO: check out other config on omarchy
-# TODO: switch ghostty fonts based on mac vs. Linux
 
 set -euo pipefail
 
