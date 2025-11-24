@@ -4,7 +4,6 @@
 # This script detects the OS, installs prerequisites, and calls individual
 # step scripts for each tool based on the operating system
 
-# TODO: install omarchy tmux switcher
 # TODO: check out other config on omarchy
 # TODO: switch ghostty fonts based on mac vs. Linux
 
@@ -101,6 +100,7 @@ if [[ "$os" == "mac" ]]; then
   run_step "install_sketchybar.sh"
   run_step "install_zshrc.sh"
 elif [[ "$os" == "arch" ]]; then
+  run_step "install_omarchy_tmux.sh"
   run_step "install_hypr.sh"
   run_step "install_bashrc.sh"
 fi
