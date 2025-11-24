@@ -7,7 +7,6 @@
 # TODO: install omarchy tmux switcher
 # TODO: check out other config on omarchy
 # TODO: switch ghostty fonts based on mac vs. Linux
-# TODO: ensure TPM gets installed on omarchy
 # TODO: run hyprctl reload after loading omarchy files
 
 set -euo pipefail

@@ -103,4 +103,42 @@ fi
 
 echo "tmux will use config from: $TMUX_CONFIG_PATH"
 
+# --- Install TPM (Tmux Plugin Manager) ---
+TPM_PATH="$CONFIG_BASE_PATH/tmux/plugins/tpm"
+TPM_EXECUTABLE="$TPM_PATH/tpm"
+
+# Check if git is available (required for TPM installation)
+if ! command -v git >/dev/null 2>&1; then
+  echo "Warning: git is not installed. TPM cannot be installed automatically." >&2
+  echo "Please install git and run this script again, or install TPM manually:" >&2
+  echo "  git clone https://github.com/tmux-plugins/tpm $TPM_PATH" >&2
+else
+  # Check if TPM is already installed
+  if [[ -d "$TPM_PATH" ]] && [[ -f "$TPM_EXECUTABLE" ]]; then
+    echo "TPM already installed at $TPM_PATH"
+  else
+    echo "Installing TPM (Tmux Plugin Manager)..."
+    # Create plugins directory if it doesn't exist
+    mkdir -p "$CONFIG_BASE_PATH/tmux/plugins"
+    
+    # Clone TPM if directory doesn't exist or is empty
+    if [[ ! -d "$TPM_PATH" ]] || [[ -z "$(ls -A "$TPM_PATH" 2>/dev/null)" ]]; then
+      if git clone https://github.com/tmux-plugins/tpm "$TPM_PATH"; then
+        echo "✅ TPM installed successfully at $TPM_PATH"
+      else
+        echo "Error: Failed to install TPM" >&2
+        exit 1
+      fi
+    else
+      echo "TPM directory exists but may be incomplete. Attempting to update..."
+      if [[ -d "$TPM_PATH/.git" ]]; then
+        (cd "$TPM_PATH" && git pull)
+        echo "✅ TPM updated successfully"
+      else
+        echo "Warning: TPM directory exists but is not a git repository. Skipping installation." >&2
+      fi
+    fi
+  fi
+fi
+
 echo "✅ tmux setup complete!"
