@@ -96,4 +96,21 @@ else
   echo "Custom config already included — skipping append."
 fi
 
+# Reload Hyprland configuration if hyprctl is available and Hyprland is running
+if command -v hyprctl >/dev/null 2>&1; then
+  # Check if Hyprland is running by checking if hyprctl can connect
+  if hyprctl version >/dev/null 2>&1; then
+    echo "Reloading Hyprland configuration..."
+    if hyprctl reload; then
+      echo "✅ Hyprland configuration reloaded successfully"
+    else
+      echo "Warning: Failed to reload Hyprland configuration. You may need to reload manually." >&2
+    fi
+  else
+    echo "Hyprland is not currently running. Configuration will be loaded on next Hyprland start."
+  fi
+else
+  echo "hyprctl not found. Skipping configuration reload."
+fi
+
 echo "✅ Hyprland dotfiles installed successfully!"
