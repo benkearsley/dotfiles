@@ -141,4 +141,29 @@ else
   fi
 fi
 
+# --- Install tmux plugins via TPM ---
+if [[ -d "$TPM_PATH" ]] && [[ -f "$TPM_EXECUTABLE" ]]; then
+  echo "Installing tmux plugins from configuration..."
+  
+  # Use TPM's install_plugins script to install all plugins listed in tmux.conf
+  TPM_INSTALL_SCRIPT="$TPM_PATH/bin/install_plugins"
+  
+  if [[ -f "$TPM_INSTALL_SCRIPT" ]]; then
+    # Set the plugin manager path environment variable
+    export TMUX_PLUGIN_MANAGER_PATH="$CONFIG_BASE_PATH/tmux/plugins"
+    
+    # Run the install script - it reads from the tmux config file
+    if bash "$TPM_INSTALL_SCRIPT" "$TMUX_CONFIG_PATH" 2>/dev/null; then
+      echo "✅ Plugins installed successfully"
+    else
+      echo "Warning: Plugin installation had issues. Plugins may need to be installed manually with 'prefix + I' in tmux." >&2
+    fi
+  else
+    echo "Warning: TPM install script not found. Plugins may need to be installed manually." >&2
+    echo "After starting tmux, press 'prefix + I' (default prefix is Ctrl+Space) to install plugins." >&2
+  fi
+else
+  echo "Warning: TPM not installed. Plugins cannot be installed automatically." >&2
+fi
+
 echo "✅ tmux setup complete!"
