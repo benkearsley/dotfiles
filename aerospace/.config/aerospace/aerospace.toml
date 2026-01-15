@@ -122,9 +122,9 @@ run = 'layout floating'
     2 = 'main'  # Always on laptop
     3 = 'main'  # Always on laptop
     4 = 'main'  # Always on laptop
-    5 = ['^(?!main$|Built-in).*', 'main']  # External monitor (any monitor except main/Built-in), fallback to main
-    6 = ['^(?!main$|Built-in).*', 'main']  # External monitor (any monitor except main/Built-in), fallback to main
-    7 = ['^(?!main$|Built-in).*', 'main']  # External monitor (any monitor except main/Built-in), fallback to main
+    5 = ['^(?!main$|Built-in).*', 'Sceptre', 'main']  # External monitor (any monitor except main/Built-in), fallback to main
+    6 = ['^(?!main$|Built-in).*', 'Sceptre', 'main']  # External monitor (any monitor except main/Built-in), fallback to main
+    7 = ['^(?!main$|Built-in).*', 'Sceptre', 'main']  # External monitor (any monitor except main/Built-in), fallback to main
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -203,6 +203,8 @@ run = 'layout floating'
     alt-tab = 'workspace-back-and-forth'
     # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
     alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+    alt-n = 'workspace --wrap-around next'
+    alt-p  = 'workspace --wrap-around prev'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
     alt-shift-semicolon = 'mode service'
