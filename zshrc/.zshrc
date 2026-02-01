@@ -22,7 +22,14 @@ export PATH="/Users/b0k07eo/.rd/bin:$PATH"
 
 # Added by Code Puppy installer on Wed Dec 10 16:34:33 CST 2025
 alias code-puppy="$HOME/.code-puppy-venv/bin/code-puppy"
-export $(grep puppy_token ~/.code_puppy/puppy.cfg | sed 's| ||g')
 
 # Added by Wibey CLI installation
 export PATH="/Users/b0k07eo/.local/bin:$PATH"
+
+mcp-cli auth login
+if [ -f "$HOME/.mcp-cli/tokens.json" ]; then
+  export PING_TOKEN=$(python3 -c "import json, os; print(json.load(open(os.path.expanduser('~/.mcp-cli/tokens.json'))).get('access_token', ''))" 2>/dev/null)
+fi
+
+# Added by Wibey CLI installation
+export BUN_INSTALL_CACHE_DIR="/Users/b0k07eo/.local/share/bun/cache"
