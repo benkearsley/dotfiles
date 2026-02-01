@@ -1,0 +1,216 @@
+use crate::app::{App, AppResult, AppState};
+use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
+use tui_textarea::{Key, Input};
+
+/// Handles the key events and updates the state of [`App`].
+pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
+    // Check global hotkeys first and always immediately handle them regardless
+    // of mode
+
+    // TRUE globals - no matter what the mode always respond to these first
+    match key_event.into() {
+        // Exit application on `Ctrl-C`
+        Input { key: Key::Char('c') | Key::Char('C'), ctrl: true, ..} =>  {
+            app.quit();
+            return Ok(());
+        }
+        _ => ()
+    }
+
+    // As long as the state is not one of the prompting states, check for globals
+    if !matches!(app.state, AppState::Renaming | AppState::SessionsSearch | AppState::NewSession) {
+        match key_event.code {
+            // Exit application on `ESC` or `q`
+            KeyCode::Char('q') => {
+                app.quit();
+                return Ok(());
+            }
+            _ => ()
+        }
+    }
+    // Check hotkeys based on different app states that can handle different
+    // keys
+    match app.state {
+        AppState::Sessions => {
+            match key_event.code {
+                // Move up the list
+                KeyCode::Char('k') | KeyCode::Up => {
+                    if !app.sessions.is_empty() {
+                        app.selected_session = app.selected_session.checked_sub(1).unwrap_or(0)
+                    }
+                }
+                KeyCode::Char('p') => { // C-p
+                    if key_event.modifiers == KeyModifiers::CONTROL && !app.sessions.is_empty() {
+                        app.selected_session = app.selected_session.checked_sub(1).unwrap_or(0)
+                    }
+                }
+                // Move down the list
+                KeyCode::Char('j') | KeyCode::Down => {
+                    if !app.sessions.is_empty() {
+                        app.selected_session = (app.selected_session + 1).min(app.sessions.len()-1)
+                    }
+                }
+                KeyCode::Char('n') => { // C-n
+                    if key_event.modifiers == KeyModifiers::CONTROL {
+                        if !app.sessions.is_empty() {
+                            app.selected_session = (app.selected_session + 1).min(app.sessions.len()-1)
+                        }
+                    } else {
+                        app.confirm_new_session();
+                    }
+                }
+                // Enter/select to attach
+                KeyCode::Enter | KeyCode::Char('a') => {
+                    if let Some((name, _)) = app.sessions.get(app.selected_session) {
+                        app.attach(name.clone(), true);
+                    }
+                }
+                // Jump to top of list
+                KeyCode::Char('g') => {
+                    if !app.sessions.is_empty() {
+                        app.selected_session = 0;
+                    }
+                }
+                KeyCode::Char(' ') => {
+                    app.refresh();
+                }
+                // Jump to top end of list
+                KeyCode::Char('G') => {
+                    if !app.sessions.is_empty() {
+                        app.selected_session = app.sessions.len() - 1;
+                    }
+                }
+                KeyCode::Char('x') => {
+                    // Start the delete process for the currently selected
+                    // session (only if there are sessions to delete)
+                    if !app.sessions.is_empty() {
+                        app.confirm_delete();
+                    }
+                }
+                KeyCode::Char('N') => {
+                    // Create and attach a new session. If the user is currently
+                    // in a tmux session so the attach would fail, instead of
+                    // attempting attach, just refresh the list
+                    app.new_session(None);
+                }
+                KeyCode::Char('r') => {
+                    if !app.sessions.is_empty() {
+                        app.confirm_rename();
+                    }
+                }
+                KeyCode::Char('R') => {
+                    app.confirm_rename_current();
+                }
+                KeyCode::Char('/') => {
+                    if !app.sessions.is_empty() {
+                        app.search();
+                    }
+                }
+                // TODO: d -> detach all clients from the session
+                _ => {}
+            }
+        },
+        AppState::SessionsSearch => {
+            match key_event.into() {
+                Input { key: Key::Enter, .. } => {
+                    // Update selected session with first search result
+                    if let Some(new_row) = app.search_session_selected {
+                        app.selected_session = new_row;
+                    }
+                    app.dismiss_all();
+                },
+                Input { key: Key::Esc, .. } => {
+                    // Ensure no search session is selected
+                    app.search_session_selected = None;
+                    app.dismiss_all();
+                },
+                Input { key: Key::Char('p'), ctrl: true, .. } => {
+                    if let Some(selected_row) = app.search_session_selected {
+                        if let Some(cur_idx) = app.matching_rows.iter().position(|row_idx| {
+                            *row_idx == selected_row
+                        }) {
+                            let new_idx = cur_idx.checked_sub(1).unwrap_or(0);
+                            app.search_session_selected = Some(app.matching_rows[new_idx]);
+                        }
+                    }
+                },
+                Input { key: Key::Char('n'), ctrl: true, .. } => {
+                    if let Some(selected_row) = app.search_session_selected {
+                        if let Some(cur_idx) = app.matching_rows.iter().position(|row_idx| {
+                            *row_idx == selected_row
+                        }) {
+                            let new_idx = (cur_idx + 1).min(app.matching_rows.len()-1);
+                            app.search_session_selected = Some(app.matching_rows[new_idx]);
+                        }
+                    }
+                },
+                input => {
+                    if let Some(ref mut textarea) = app.search_session_ta {
+                        textarea.input(input);
+                    }
+                }
+            }
+        },
+        AppState::Deleting => {
+            match key_event.code {
+                KeyCode::Char('y') => {
+                    // Delete the highlighted session
+                    app.delete();
+                },
+                KeyCode::Char('n') | KeyCode::Esc => {
+                    // Cancel - hide the popup
+                    app.dismiss_all();
+                },
+                _ => (),
+            }
+        },
+        AppState::Renaming => {
+            // If the renaming dialog is up, user can either escape out or hit enter to trigger
+            // rename. Any valid symbols for a tmux session name should be pushed onto the rename
+            // string
+            match key_event.into() {
+                Input { key: Key::Enter, .. } => {
+                    // Read the textarea contents and use it to rename the session
+                    if let Some(textarea) = &app.rename_session_ta {
+                        let rename = &textarea.lines()[0].to_string();
+                        app.rename(rename);
+                    }
+                },
+                Input { key: Key::Esc, .. } => {
+                    app.dismiss_all();
+                },
+                input => {
+                    if let Some(ref mut textarea) = app.rename_session_ta {
+                        // returns true if the input modified the text contents
+                        textarea.input(input);
+                    }
+                }
+            }
+        },
+        AppState::NewSession => {
+            // Similar to Renaming interface except for final result
+            match key_event.into() {
+                Input { key: Key::Enter, .. } => {
+                    // Read the textarea contents and use it to create a new session
+                    if let Some(textarea) = &app.new_session_ta {
+                        let name = &textarea.lines()[0].to_string();
+                        app.new_session(Some(name));
+                    }
+                },
+                Input { key: Key::Esc, .. } => {
+                    app.dismiss_all();
+                },
+                input => {
+                    if let Some(ref mut textarea) = app.new_session_ta {
+                        textarea.input(input);
+                    }
+                }
+            }
+        },
+        AppState::WarnNested => {
+            // Any key should dismiss
+            app.dismiss_all();
+        }
+    }
+    Ok(())
+}
